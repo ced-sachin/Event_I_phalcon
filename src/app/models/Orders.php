@@ -1,14 +1,16 @@
 <?php
 
 use Phalcon\Mvc\Model;
+use Products;
 
 class Orders extends Model
-{
+{   
+    public $id;
     public $customername;
-    public $description;
+    public $customeraddress;
     public $zipcode;
     public $product;
-    public $stock;
+    public $quantity;
     
     
     public function initialize()
@@ -22,8 +24,13 @@ class Orders extends Model
     }
 
     public function getProduct()
+    {   
+        return Products::findFirst($this->product)->getProductname(); 
+    }
+
+    public function getCustomeraddress() 
     {
-        return $this->product; 
+        return $this->customeraddress;
     }
 
     public function getCustomername()
@@ -36,13 +43,8 @@ class Orders extends Model
         return $this->zipcode; 
     }
 
-    public function getStock()
+    public function getQuantity()
     {
-        return $this->stock; 
-    }
-
-    public function getStock()
-    {
-        return $this->stock; 
+        return $this->quantity; 
     }
 }

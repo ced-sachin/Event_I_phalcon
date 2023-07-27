@@ -1,21 +1,58 @@
-<h3 class="text-light bg-dark">SETTINGS</h3>
-<form>
-    <div class="form-group">
-        <label for="titleoptimization"> Title optimization </label>
-        <input class="form-control" id='titleoptimization' type="text" placeholder="Title optimization">
+<h3 class="text-light bg-dark">Add Order</h3>
+<?php ($success) ?>
+<div class="alert alert-<?php echo $success === true ? 'success' : ''; ?>">
+    <?php echo $message; ?>
+</div>
+<?php echo $this->tag->form("settings/update"); ?>
+<div class="form-group">
+        <label for="titleoptimization">Title Optimization</label>
+         <?php 
+            echo Phalcon\Tag::select(
+                ["titleoptimization",
+                [
+                    "0" => "Yes",
+                    "1" => "No",
+                ],
+                "class" => "form-control",
+                "selected" => $settings !== null ? $settings->getTitleoptimization(): 1 
+                ]
+            ); ?>
     </div>
     <div class="form-group">
-    <label for="defaultprice">Default Price</label>
-    <textarea class="form-control" id="defaultprice" rows="3" placeholder="Default Price"></textarea>
-    </div>
+         <label for="defaultprice">Default Price</label>
+         <?php echo $this->tag->textField(
+            ['name' => 'defaultprice',
+            "rows"=>"3",'maxlength' => 30,
+             'placeholder' => 'Default Price',
+             'class' => 'form-control',
+             'value' => $settings !== null ? $settings->getDefualtprice(): ''
+              ]); ?>
+            
+        </div>
     <div class="form-group">
-        <label for="defaultzipcode">Default Zipcode</label>
-        <input class="form-control" id='defaultzipcode' type="text" placeholder="Default Zipcode">
+         <label for="defaultzipcode">Default Zipcode</label>
+         <?php echo $this->tag->textField(
+            ['name' => 'defaultzipcode',
+             "rows"=>"3",
+             'maxlength' => 30,
+             'placeholder' => 'Default Zipcode',
+             'class' => 'form-control',
+             'value' => $settings !== null ? $settings->getDefualtzipcode(): ''
+             ]);
+          ?>
     </div>
     <div class="form-group">
         <label for="defaultstock">Default Stock</label>
-        <input class="form-control" id='defaultstock' type="text" placeholder="Default Stock">
+        <!-- <input class="form-control" id='zipcode' type="text" placeholder="Zipcode"> -->
+        <?php echo $this->tag->textField(
+            ['name' => 'defaultstock',
+            'maxlength' => 30,
+            'placeholder' => 'Default Stock',
+            'class' => 'form-control',
+            'value' => $settings !== null ? $settings->getDefaultstock(): ''
+            ]); ?>
     </div>
+    
     <button type="submit" class="btn btn-primary">Submit</button>
 </div> 
 </form>
