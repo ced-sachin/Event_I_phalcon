@@ -4,9 +4,9 @@
     <?php echo $message; ?>
 </div>
 <?php echo $this->tag->form("settings/update"); ?>
-<div class="form-group">
+    <div class="form-group">
         <label for="titleoptimization">Title Optimization</label>
-         <?php 
+            <?php 
             echo Phalcon\Tag::select(
                 ["titleoptimization",
                 [
@@ -19,27 +19,26 @@
             ); ?>
     </div>
     <div class="form-group">
-         <label for="defaultprice">Default Price</label>
-         <?php echo $this->tag->textField(
+            <label for="defaultprice">Default Price</label>
+            <?php echo $this->tag->textField(
             ['name' => 'defaultprice',
             "rows"=>"3",'maxlength' => 30,
-             'placeholder' => 'Default Price',
-             'class' => 'form-control',
-             'value' => $settings !== null ? $settings->getDefualtprice(): ''
-              ]); ?>
-            
+                'placeholder' => 'Default Price',
+                'class' => 'form-control',
+                'value' => $settings !== null ? $settings->getDefualtprice(): ''
+                ]); ?>            
         </div>
     <div class="form-group">
-         <label for="defaultzipcode">Default Zipcode</label>
-         <?php echo $this->tag->textField(
+            <label for="defaultzipcode">Default Zipcode</label>
+            <?php echo $this->tag->textField(
             ['name' => 'defaultzipcode',
-             "rows"=>"3",
-             'maxlength' => 30,
-             'placeholder' => 'Default Zipcode',
-             'class' => 'form-control',
-             'value' => $settings !== null ? $settings->getDefualtzipcode(): ''
-             ]);
-          ?>
+                "rows"=>"3",
+                'maxlength' => 30,
+                'placeholder' => 'Default Zipcode',
+                'class' => 'form-control',
+                'value' => $settings !== null ? $settings->getDefualtzipcode(): ''
+                ]);
+            ?>
     </div>
     <div class="form-group">
         <label for="defaultstock">Default Stock</label>
