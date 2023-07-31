@@ -9,7 +9,7 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
-use App\Listeners\NotificationListeners;
+use App\Controllers\SecureController;
 
 $config = new Config([]);
 
@@ -24,6 +24,13 @@ $loader->registerDirs(
     [
         APP_PATH . "/controllers/",
         APP_PATH . "/models/",
+    ]
+);
+
+$loader->registerNamespaces(
+    [
+        'App\Components' => APP_PATH.'/components',
+        'App\Listeners' => APP_PATH.'/listeners'
     ]
 );
 
@@ -49,37 +56,32 @@ $container->set(
     }
 );
 
-$eventsManager = new EventsManager();
-$eventsManager->attach(
-    'notifications',
-    new NotificationListeners()
-);
+$container->setShared('secureController', function () {
+    return new SecureController();
+});
 
-// $eventsManager->attach(
-//     'do:afterQuery',
-//     function (Event $event, $connection) use ($logger) {
-//         $logger->error($connection->getSQLStatement());
-//     }
-// );
+$application = new Application($container);
+
+$eventsManager = new EventsManager();
 
 $eventsManager->attach(
     'application:beforeHandleRequest',
-    new NotificationListeners()
+    new App\Listeners\NotificationListeners()
 );
+
+$eventsManager->fire('application:beforeHandleRequest', $application);
 
 $container->set(
-    'EventsManager',
+    'eventsManager',
     $eventsManager
 );
-
-$application = new Application($container);
 
 $container->set(
     'db',
     function () {
         return new Mysql(
             [
-                'host'     => 'event_i_phalcon-mysql-server-1',
+                'host'     => 'event_i-mysql-server-1',
                 'username' => 'root',
                 'password' => 'secret',
                 'dbname'   => 'dbphalcon',
@@ -87,16 +89,6 @@ $container->set(
             );
         }
 );
-
-// $container->set(
-//     'mongo',
-//     function () {
-//         $mongo = new MongoClient();
-
-//         return $mongo->selectDB('phalt');
-//     },
-//     true
-// );
 
 try {
     // Handle the request
