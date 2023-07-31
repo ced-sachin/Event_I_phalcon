@@ -7,6 +7,9 @@ use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
+use App\Listeners\NotificationListeners;
 
 $config = new Config([]);
 
@@ -46,16 +49,37 @@ $container->set(
     }
 );
 
+$eventsManager = new EventsManager();
+$eventsManager->attach(
+    'notifications',
+    new NotificationListeners()
+);
+
+// $eventsManager->attach(
+//     'do:afterQuery',
+//     function (Event $event, $connection) use ($logger) {
+//         $logger->error($connection->getSQLStatement());
+//     }
+// );
+
+$eventsManager->attach(
+    'application:beforeHandleRequest',
+    new NotificationListeners()
+);
+
+$container->set(
+    'EventsManager',
+    $eventsManager
+);
+
 $application = new Application($container);
-
-
 
 $container->set(
     'db',
     function () {
         return new Mysql(
             [
-                'host'     => 'event_i-mysql-server-1',
+                'host'     => 'event_i_phalcon-mysql-server-1',
                 'username' => 'root',
                 'password' => 'secret',
                 'dbname'   => 'dbphalcon',
